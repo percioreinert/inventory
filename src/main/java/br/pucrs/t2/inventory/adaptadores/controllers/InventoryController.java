@@ -10,23 +10,19 @@ public class InventoryController {
 
     private InventoryService inventoryService;
 
-    @GetMapping("/autorizacao")
-    @CrossOrigin(origins = "*")
-    public boolean podeVender(@RequestParam final long codProd,
-                              @RequestParam final int qtdade) {
-        return inventoryService.podeVender(codProd, qtdade);
+    public InventoryController(InventoryService inventoryService) {
+        this.inventoryService = inventoryService;
     }
 
-    @PostMapping("/confirmacao")
+    @PutMapping("/salvar")
     @CrossOrigin(origins = "*")
-    public boolean confirmaVenda(@RequestBody final ItemEstoque[] itens) {
-        inventoryService.confirmaVenda(itens);
-        return true;
+    public void save(@RequestBody ItemEstoque itemEstoque) {
+        inventoryService.save(itemEstoque);
     }
 
-    @PostMapping("/subtotal")
+    @GetMapping("/{codProd}")
     @CrossOrigin(origins = "*")
-    public Integer[] calculaSubtotal(@RequestBody final ItemEstoque[] itens) {
-        return inventoryService.calculaSubtotal(itens);
+    public ItemEstoque podeVender(@PathVariable final long codProd) {
+        return inventoryService.getItemEstoque(codProd);
     }
 }
